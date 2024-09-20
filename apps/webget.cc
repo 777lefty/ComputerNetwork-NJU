@@ -9,8 +9,43 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
-  cerr << "Warning: get_URL() has not been implemented yet.\n";
+  // host: cs144.keithw.org
+  // path: /hello
+  TCPSocket socket;
+  const Address HostAdress = Address( host, "http" ); // resolve the host name
+  socket.connect( HostAdress );                       // open the byte stream to the host server
+
+  // now write to the stream as is done in the terminal in the previous parts
+  std::string data;
+  socket.write( "GET " + path + " HTTP/1.1\r\n" );
+  // if ( socket.eof() ) {
+  //   cerr << "EOF reached\n";
+  // } else {
+  //   socket.read( data );
+  //   cerr << "Data read: " << data << "\n";
+  // }
+  socket.write( "Host: " + host + "\r\n" );
+  // if ( socket.eof() ) {
+  //   cerr << "EOF reached\n";
+  // } else {
+  //   socket.read( data );
+  //   cerr << "Data read: " << data << "\n";
+  // }
+  socket.write( "Connection: close\r\n" );
+  // if ( socket.eof() ) {
+  //   cerr << "EOF reached\n";
+  // } else {
+  //   socket.read( data );
+  //   cerr << "Data read: " << data << "\n";
+  // }
+  socket.write( "\r\n" );
+  while ( !socket.eof() ) {
+    socket.read( data );
+    cout << data;
+  }
+  socket.close();
+  // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
+  // cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
 
 int main( int argc, char* argv[] )
