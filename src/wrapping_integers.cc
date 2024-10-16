@@ -1,5 +1,4 @@
 #include "wrapping_integers.hh"
-#include <iostream>
 
 using namespace std;
 

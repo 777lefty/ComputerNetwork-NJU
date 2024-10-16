@@ -27,4 +27,6 @@ public:
 
 private:
   Reassembler reassembler_;
+  Wrap32 seqno_ { 0 };
+  bool syn_ { false };
 };
