@@ -48,4 +48,13 @@ private:
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+  std::vector<TCPSenderMessage> unack_buffer_ {};
+  uint64_t retransmission_cnt = 0;
+  uint32_t windows_size_ = 1;
+  uint64_t first_unacked_ = 0;
+  uint64_t current_RTO_ = initial_RTO_ms_;
+  uint64_t current_time_ = 0;
+  bool timer_start_ = false;
+  bool syn_sent_ = false;
+  bool fin_sent_ = false;
 };

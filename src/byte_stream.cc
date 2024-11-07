@@ -14,7 +14,7 @@ void Writer::push( string data )
 {
   // Your code here.
   //(void)data;
-  if ( has_error() || is_closed() ) {
+  if ( is_closed() || data.empty() ) {
     return;
   }
   const uint64_t len_to_push = min( available_capacity(), data.size() );
