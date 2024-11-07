@@ -69,7 +69,6 @@ TCPSenderMessage TCPSender::make_empty_message() const
   message.SYN = false;
   message.FIN = false;
   message.RST = input_.has_error();
-  message.payload = string();
   return message;
 }
 
