@@ -31,7 +31,6 @@ void TCPSender::push( const TransmitFunction& transmit )
     return;
   }
   remain_space -= sequence_numbers_in_flight();
-  std::cout << "in push function, remain space is: " << remain_space << endl;
   while ( remain_space > 0 ) {
     TCPSenderMessage message = make_empty_message();
     if ( !syn_sent_ ) {
