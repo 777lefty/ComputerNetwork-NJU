@@ -5,13 +5,15 @@
 #include <span>
 #include <string>
 
+#include "tcp_minnow_socket.hh"
+
 using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
   // host: cs144.keithw.org
   // path: /hello
-  TCPSocket socket;
+  CS144TCPSocket socket;
   const Address HostAdress = Address( host, "http" ); // resolve the host name
   socket.connect( HostAdress );                       // open the byte stream to the host server
 
