@@ -1,10 +1,20 @@
 #pragma once
 
 #include <queue>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "address.hh"
 #include "ethernet_frame.hh"
 #include "ipv4_datagram.hh"
+
+typedef uint16_t EthernetType;
+
+struct ARPTableEntry
+{
+  EthernetAddress ethernet_address;
+  uint64_t expire_time;
+};
 
 // A "network interface" that connects IP (the internet layer, or network layer)
 // with Ethernet (the network access layer, or link layer).
@@ -45,6 +55,19 @@ public:
                     const EthernetAddress& ethernet_address,
                     const Address& ip_address );
 
+  // Creates an Ethernet frame with the given destination Ethernet address, Ethernet type, and payload
+  EthernetFrame create_frame( const EthernetAddress& src_ethernet_address,
+                              const EthernetAddress& dest_ethernet_address,
+                              EthernetType type,
+                              std::vector<std::string> data );
+
+  // Creates an ARP request with the given opcode, sender and target Ethernet addresses and IP addresses
+  ARPMessage create_arp_request( const uint16_t opcode,
+                                 const EthernetAddress sender_ethernet_address,
+                                 const uint32_t sender_ip_address,
+                                 const EthernetAddress target_ethernet_address,
+                                 const uint32_t target_ip_address );
+
   // Sends an Internet datagram, encapsulated in an Ethernet frame (if it knows the Ethernet destination
   // address). Will need to use [ARP](\ref rfc::rfc826) to look up the Ethernet destination address for the next
   // hop. Sending is accomplished by calling `transmit()` (a member variable) on the frame.
@@ -81,4 +104,17 @@ private:
 
   // Datagrams that have been received
   std::queue<InternetDatagram> datagrams_received_ {};
+  // Below are my new defined data structures
+  uint64_t timer_ = 0;
+
+  // Mapping from IP address to Ethernet address
+  std::unordered_map<uint32_t, ARPTableEntry> arp_table_ {};
+
+  std::unordered_map<uint32_t, uint64_t> arp_request_expire_time_ {};
+
+  // Internet datagrams that are waiting
+  std::unordered_map<uint32_t, std::queue<InternetDatagram>> waiting_datagrams_ {};
+
+  // ARP requests that have been sent
+  std::unordered_set<uint32_t> arp_requests_sent_ {};
 };
