@@ -53,11 +53,6 @@ void Router::route()
         for ( i = 0; i < route.prefix_length; i++ ) {
           if ( ( dst & ( 1 << ( 31 - i ) ) ) != ( route.route_prefix & ( 1 << ( 31 - i ) ) ) )
             break;
-          // if ( i == route.prefix_length - 1 && route.prefix_length >= max_prefix_length ) {
-          //   max_prefix_length = route.prefix_length;
-          //   next_hop = route.next_hop;
-          //   interface_num = route.interface_num;
-          // }
         }
         if ( i == route.prefix_length && route.prefix_length >= max_prefix_length ) {
           max_prefix_length = route.prefix_length;
